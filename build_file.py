@@ -1,10 +1,14 @@
 import sys, json, zipfile
-import shutil
+import shutil, os
 
 data = json.loads(sys.argv[1])
 src = "D:\\epics\\portfolio_builder\\css site-1"
 print("here")
-des = f'D:\\epics\\portfolio_builder\\public\\{data["firstName"]}_{data["lastName"]}-website'
+nwebsites = 1
+for path in os.scandir("D:\\epics\\portfolio_builder\\websites"):
+  if not path.is_file():
+    nwebsites+=1
+des = f'D:\\epics\\portfolio_builder\\websites\\website-{nwebsites}\\{data["firstName"]}_{data["lastName"]}-website'
 shutil.copytree(src, des)
 print("here")
 html = f"""
@@ -99,6 +103,6 @@ html+=f"""
 f=open(des+"\\index.html",'w')
 f.write(html)
 f.close()
-des1 = f'D:\\epics\\portfolio_builder\\public\\{data["firstName"]}_{data["lastName"]}-zipped-website'
+des1 = f'D:\\epics\\portfolio_builder\\websites\\website-{nwebsites}\\{data["firstName"]}_{data["lastName"]}'
 shutil.make_archive(des1,'zip', des)
 sys.stdout.flush()
